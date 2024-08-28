@@ -37,11 +37,11 @@ usuarioSchema.methods.encrypPassword = async function(password){
     return passwordEncryp
 }
 // * Método para verificar si el password ingresado es el mismo de la BDD
-UsuarioSchema.methods.matchPassword = async function(password){
-    const response = await bcrypt.compare(password,this.password)
+usuarioSchema.methods.matchPassword = async function(password){
+    const response = await bcrypt.compare(password, this.password)
     return response
 }
-UsuarioSchema.methods.crearToken = function(){
+usuarioSchema.methods.crearToken = function(){
     const tokenGenerado = this.token = Math.random().toString(36).slice(2)
     return tokenGenerado
 }

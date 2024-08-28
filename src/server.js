@@ -2,7 +2,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors';
-
+import routerusuario from "./routers/usuario_router.js"
 
 
 // Inicializaciones
@@ -24,6 +24,8 @@ app.use(express.json())
 app.get('/',(req,res)=>{
     res.send("Server on")
 })
+
+app.use("/caso4", routerusuario)
 
 // Exportar la instancia de express por medio de app
 export default  app
