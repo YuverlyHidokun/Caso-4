@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Cliente from "../models/cliente.js";
-import Usuario from "../models/usuarios.js";
+import Usuario from "../models/usuario.js";
 
 const CrearCliente = async (req, res) =>{
     // Solicuitud
@@ -58,17 +58,34 @@ const detalleCliente = async(req,res)=>{
     res.status(200).json(cliente)
 }
 
-const ActualizarCliente = async (req,res) => {
-    // Solicitud
-    const {id} = req.params
+const ActualizarCliente= async (req, res) => {
+    const { id } = req.params;
+
     // Validaciones
-    if(Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debe llenar todos los datos"})
-    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({msg:"No se ha encontrado a un cliente con ese id"})
-    // BDD
-    await Cliente.findByIdAndUpdate(req.params.id, req.body)
-    // Respuesta
-    res.status(200).json({msg:"Se ha actualizado la informacion del cliente"})
-}
+    if (Object.values(req.body).includes("")) {
+        return res.status(400).json({ msg: "Lo sentimos, debe llenar todos los datos" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ msg: "No se ha encontrado a un cliente con ese ID" });
+    }
+
+    try {
+        // Actualizar el técnico
+        const clienteActualizado = await Cliente.findByIdAndUpdate(id, req.body, { new: true });
+
+        // Si el técnico no se encuentra
+        if (!clienteActualizado) {
+            return res.status(404).json({ msg: "Técnico no encontrado" });
+        }
+
+        // Responder con el técnico actualizado
+        res.status(200).json(clienteActualizado);
+    } catch (error) {
+        console.error("Error al actualizar el cliente:", error);
+        res.status(500).json({ msg: "Error en el servidor" });
+    }
+};
+
 
 const EliminarCliente = async (req,res) => {
     // Solicitud
