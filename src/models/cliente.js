@@ -37,11 +37,11 @@ const clienteSchema = new Schema({
         trim:true,
         default:null
     },
-    fecha_nacimiento:{
-        type:Number,
-        trim:true,
-        default:null
-    },
+    fecha_nacimiento: {
+        type:Date,
+        require:true,
+        maxlenght:20
+    }, 
     dependencia:{
         type: String,
         trim: true,

@@ -1,4 +1,5 @@
 import Usuario from '../models/usuario.js'
+import generarJWT from "../helpers/crearJWT.js";
 import mongoose from "mongoose"
 
 const registro = async(req,res)=>{
@@ -30,33 +31,38 @@ const registro = async(req,res)=>{
 }
 
 const login = async(req,res) =>{
-    const {email,password} = req.body
+    const {email, password} = req.body;
 
-    //Validaciones
+    // Validaciones
     if (Object.values(req.body).includes("")){
-        return res.status(404).json({msg:"Lo sentimos, debes llenar todos los campos"})
+        return res.status(404).json({msg:"Lo sentimos, debes llenar todos los campos"});
     }
     
-    //BDD
-    const usuarioBDD = await Usuario.findOne({email})
-    if(usuarioBDD?.confirmEmail===false){
-        return res.status(403).json({msg:"Lo sentimos, debe verificar su cuenta"})
+    // Verificación en la base de datos
+    const usuarioBDD = await Usuario.findOne({email});
+    if(usuarioBDD?.confirmEmail === false){
+        return res.status(403).json({msg:"Lo sentimos, debe verificar su cuenta"});
     } 
     if(!usuarioBDD){
-        return res.status(404).json({msg:"Lo sentimos, el usuario no se encuentra registrado"})
+        return res.status(404).json({msg:"Lo sentimos, el usuario no se encuentra registrado"});
     } 
-    const verificarPassword = await usuarioBDD.matchPassword(password)
+    const verificarPassword = await usuarioBDD.matchPassword(password);
     if(!verificarPassword){
-        return res.status(404).json({msg:"Lo sentimos, el password no es el correcto"})
+        return res.status(404).json({msg:"Lo sentimos, el password no es el correcto"});
     }
-	const {nombre,apellido,_id} = usuarioBDD
+	
+    // Generar JWT
+    const token = generarJWT(usuarioBDD._id, usuarioBDD.rol);
+
+    // Respuesta
     res.status(200).json({
-        nombre,
-        apellido,
-        _id,
-        email:usuarioBDD.email,
-    })
-}
+        nombre: usuarioBDD.nombre,
+        apellido: usuarioBDD.apellido,
+        _id: usuarioBDD._id,
+        email: usuarioBDD.email,
+        token
+    });
+};
 
 const recuperarPassword = async (req, res) => {
     const { email, nuevopassword } = req.body;

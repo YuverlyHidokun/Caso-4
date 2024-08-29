@@ -3,6 +3,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors';
 import routerusuario from "./routers/usuario_router.js"
+import routertecnico from "./routers/tecnico_router.js"
 
 
 // Inicializaciones
@@ -26,6 +27,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use("/caso4", routerusuario)
+app.use("/caso4", routertecnico)
 
 // Exportar la instancia de express por medio de app
 export default  app
