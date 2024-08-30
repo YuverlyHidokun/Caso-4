@@ -15,7 +15,7 @@ const route = Router()
 route.post("/cliente/crear", verificarJWT, CrearCliente)//Ok
 route.get("/cliente/ver", verificarJWT, VerCliente)//OK
 route.get("/cliente/ver/:id", verificarJWT, detalleCliente)//OK
-route.put("/cliente/actualizar/:id", verificarJWT, ActualizarCliente)
-route.delete("/cliente/eliminar/:id", verificarJWT, EliminarCliente)
+route.put("/cliente/actualizar/:id", verificarJWT, ActualizarCliente)//OK
+route.delete("/cliente/eliminar/:id", verificarJWT, EliminarCliente)//OK
 
 export default route
